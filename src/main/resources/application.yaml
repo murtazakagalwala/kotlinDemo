@@ -1,0 +1,5 @@
+jwt:
+  key:${key}
+  access-token-expiration:60000
+  refresh-token-expiration:86400000
+
