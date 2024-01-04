@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 import java.util.Date
 
 @Service
-class JwtService(val jwtConfig: JwtConfig) {
+class JwtService(private final val jwtConfig: JwtConfig) {
 
     private val privateKey= Keys.hmacShaKeyFor(jwtConfig.key.toByteArray())
 

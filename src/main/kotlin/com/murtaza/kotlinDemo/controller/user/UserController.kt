@@ -2,6 +2,7 @@ package com.murtaza.kotlinDemo.controller.user
 
 import com.murtaza.kotlinDemo.model.Role
 import com.murtaza.kotlinDemo.model.User
+import com.murtaza.kotlinDemo.repository.UserJPARepository
 import com.murtaza.kotlinDemo.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
@@ -21,11 +22,11 @@ import java.util.*
 
 @RestController
 @RequestMapping("/api/user")
-class UserController(private val userService:UserService){
+class UserController(private val userService:UserService,private val userJpaRepository:UserJPARepository){
 
     @GetMapping
     fun getAllUser():List<UserResponse>{
-    return userService.findAll().map { it.toResponse() }
+    return userJpaRepository.findAll().map { it.toResponse() }
     }
 
     @PostMapping
@@ -50,6 +51,12 @@ class UserController(private val userService:UserService){
             ?:throw ResponseStatusException(HttpStatus.NOT_FOUND,"User Not Found")
     }
 
+    @GetMapping("/email/{email}")
+    fun getUser(@PathVariable email:String):UserResponse{
+        return userService.findByEmail(email)
+            ?.toResponse()
+            ?:throw ResponseStatusException(HttpStatus.NOT_FOUND,"User Not Found")
+    }
 
 
     fun UserRequest.toUser():User =

@@ -10,14 +10,19 @@ class UserService(val userRepository: UserRepository) {
 
     fun createUser(user:User): User?{
         val found=userRepository.findByEmail(user.email)
-
-        return if(found==null){
-            userRepository.save(user)
-            user
-        } else null
+        if (found != null) {
+            found.password=user.password
+            found.articles=user.articles
+            found.role=user.role
+            userRepository.save(found)
+        }
+        userRepository.save(user)
+        return user
     }
 
     fun findByUUID(uuid: UUID):User? = userRepository.findByUUID(uuid)
+
+    fun findByEmail(email: String):User? = userRepository.findByEmail(email)
 
     fun findAll():List<User> = userRepository.findAll()
 
